@@ -14,6 +14,13 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
+app.use(express.json());
+
+app.use((req, res, next) => {
+  req.user = { _id: "5d8b8592978f8bd833ca8133" }; // Mock user ID for testing
+  next();
+});
+
 app.use("/", mainRouter);
 
 app.listen(PORT, () => {
