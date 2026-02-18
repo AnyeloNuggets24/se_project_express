@@ -40,7 +40,7 @@ const likeItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: err.message });
     });
 };
 
@@ -58,7 +58,30 @@ const dislikeItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: err.message });
+      return res.status(400).send({ message: err.message });
+    });
+};
+
+const deleteClothingItem = (req, res) => {
+  ClothingItem.findByIdAndDelete(req.params.itemId)
+    .orFail(new Error("Item not found"))
+    .then((item) => {
+      if (item.owner.toString() !== req.user._id) {
+        return res.status(403).send({ message: "Forbidden" });
+      }
+
+      return ClothingItem.findByIdAndDelete(req.params.itemId)
+        .then(() => res.status(200).send({ message: "Item deleted" }))
+        .catch((err) => {
+          if (err.name === "CastError") {
+            return res.status(400).send({ message: "Invalid item ID" });
+          }
+          if (err.message === "Item not found") {
+            return res.status(404).send({ message: "Item not found" });
+          }
+          console.error(err);
+          return res.status(500).send({ message: err.message });
+        });
     });
 };
 
@@ -67,4 +90,5 @@ module.exports = {
   createClothingItem,
   likeItem,
   dislikeItem,
+  deleteClothingItem,
 };
