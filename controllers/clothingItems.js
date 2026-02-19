@@ -14,7 +14,7 @@ const getClothingItems = (req, res) => {
       console.error(err);
       return res
         .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -33,7 +33,7 @@ const createClothingItem = (req, res) => {
       console.error(err);
       return res
         .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -59,7 +59,7 @@ const likeItem = (req, res) => {
       }
       return res
         .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -85,38 +85,48 @@ const dislikeItem = (req, res) => {
       }
       return res
         .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
 const deleteClothingItem = (req, res) => {
-  ClothingItem.findByIdAndDelete(req.params.itemId)
-    .orFail()
+  const { itemId } = req.params;
+
+  ClothingItem.findById(itemId)
+    .orFail(() => {
+      const error = new Error("Item not found");
+      error.statusCode = NOT_FOUND_ERROR_CODE;
+      throw error;
+    })
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
         return res.status(403).send({ message: "Forbidden" });
       }
 
-      return res.status(200).send({ message: "Item deleted" });
+      return ClothingItem.deleteOne({ _id: itemId }).then(() =>
+        res.status(200).send({ message: "Item deleted" })
+      );
     })
     .catch((err) => {
       console.error(err);
+
       if (err.name === "CastError") {
         return res
           .status(BAD_REQUEST_ERROR_CODE)
           .send({ message: "Invalid item ID" });
       }
-      if (err.name === "DocumentNotFoundError") {
+
+      if (err.message === "Item not found") {
         return res
           .status(NOT_FOUND_ERROR_CODE)
           .send({ message: "Item not found" });
       }
+
       return res
         .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: err.message });
+        .send({ message: "An error has occurred on the server" });
     });
 };
-
 module.exports = {
   getClothingItems,
   createClothingItem,
