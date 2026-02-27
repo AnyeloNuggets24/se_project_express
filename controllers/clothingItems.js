@@ -4,6 +4,7 @@ const {
   BAD_REQUEST_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
   INTERNAL_SERVER_ERROR_CODE,
+  FORBIDDEN_ERROR_CODE,
 } = require("../utils/error");
 
 // GET /clothing-items
@@ -28,7 +29,7 @@ const createClothingItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_ERROR_CODE)
-          .send({ message: err.message });
+          .send({ message: "Invalid data provided" });
       }
       console.error(err);
       return res

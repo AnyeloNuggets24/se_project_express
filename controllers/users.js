@@ -11,22 +11,15 @@ const {
   UNAUTHORIZED_ERROR_CODE,
 } = require("../utils/error");
 
-// GET /users
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: "An error has occurred on the server" });
-    });
-};
-
 // POST /users
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
+
+  if (!email || !password) {
+    return res
+      .status(BAD_REQUEST_ERROR_CODE)
+      .send({ message: "Missing required fields: email or password" });
+  }
 
   bcrypt
     .hash(password, 10)
@@ -60,43 +53,28 @@ const createUser = (req, res) => {
     });
 };
 
-const getUser = (req, res) => {
-  const { userId } = req.params;
-
-  User.findById(userId)
-    .orFail()
-    .then((user) => res.status(200).send(user))
-    .catch((err) => {
-      if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_ERROR_CODE)
-          .send({ message: "User not found" });
-      }
-      if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_ERROR_CODE)
-          .send({ message: "Invalid user ID" });
-      }
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_ERROR_CODE)
-        .send({ message: "An error has occurred on the server" });
-    });
-};
-
 const login = (req, res) => {
   const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
+
+  User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      return res.status(200).send({ token });
+      res.status(200).send({ token });
     })
-    .catch(() => {
+    .catch((err) => {
+      console.error(err);
+
+      if (err.name === "Incorrect email or password") {
+        return res
+          .status(UNAUTHORIZED_ERROR_CODE)
+          .send({ message: err.message });
+      }
+
       return res
-        .status(UNAUTHORIZED_ERROR_CODE)
-        .send({ message: "Incorrect email or password" });
+        .status(INTERNAL_SERVER_ERROR_CODE)
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
@@ -131,7 +109,9 @@ const updateProfile = (req, res) => {
       if (err.name === "ValidationError") {
         return res
           .status(BAD_REQUEST_ERROR_CODE)
-          .send({ message: err.message });
+          .send({
+            message: "Invalid data passed to the update profile request",
+          });
       }
       if (err.name === "DocumentNotFoundError") {
         return res
@@ -146,10 +126,8 @@ const updateProfile = (req, res) => {
 };
 
 module.exports = {
-  getUsers,
   createUser,
-  getUser,
   login,
   getCurrentUser,
-  updateProfile
+  updateProfile,
 };
