@@ -100,7 +100,7 @@ const deleteClothingItem = (req, res) => {
     })
     .then((item) => {
       if (item.owner.toString() !== req.user._id) {
-        return res.status(403).send({ message: "Forbidden" });
+        return res.status(FORBIDDEN_ERROR_CODE).send({ message: "Forbidden" });
       }
 
       return ClothingItem.deleteOne({ _id: itemId }).then(() =>

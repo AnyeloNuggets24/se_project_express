@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const mainRouter = require("./routes/index");
+const cors = require("cors");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -14,12 +15,13 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
+app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = { _id: "5d8b8592978f8bd833ca8133" }; // Mock user ID for testing
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = { _id: "5d8b8592978f8bd833ca8133" }; // Mock user ID for testing
+//   next();
+// });
 
 app.use("/", mainRouter);
 
