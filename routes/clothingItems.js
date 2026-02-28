@@ -9,12 +9,11 @@ const {
   deleteClothingItem,
 } = require("../controllers/clothingItems");
 
-
 router.get("/", getClothingItems); // public
 router.use(auth); // protect everything below
 router.post("/", createClothingItem);
 router.delete("/:id", deleteClothingItem);
-router.put("/:id/likes", likeClothingItem);
-router.delete("/:id/likes", dislikeClothingItem);
+router.put("/:id/likes", likeItem);
+router.delete("/:id/likes", dislikeItem);
 
 module.exports = router;
