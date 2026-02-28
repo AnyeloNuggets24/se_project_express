@@ -9,10 +9,12 @@ const {
   deleteClothingItem,
 } = require("../controllers/clothingItems");
 
-router.get("/", getClothingItems);
 
-router.post("/", auth, createClothingItem);
-router.put("/:itemId/likes", auth, likeItem);
-router.delete("/:itemId/likes", auth, dislikeItem);
-router.delete("/:itemId", auth, deleteClothingItem);
+router.get("/", getClothingItems); // public
+router.use(auth); // protect everything below
+router.post("/", createClothingItem);
+router.delete("/:id", deleteClothingItem);
+router.put("/:id/likes", likeClothingItem);
+router.delete("/:id/likes", dislikeClothingItem);
+
 module.exports = router;

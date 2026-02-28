@@ -21,13 +21,14 @@ const createUser = (req, res) => {
       .send({ message: "Missing required fields: email or password" });
   }
 
-  bcrypt
+  return bcrypt
     .hash(password, 10)
     .then((hash) => {
       return User.create({ name, avatar, email, password: hash });
     })
     .then((user) =>
       res.status(201).send({
+        _id: user._id,
         name: user.name,
         avatar: user.avatar,
         email: user.email,
@@ -66,7 +67,7 @@ const login = (req, res) => {
     .catch((err) => {
       console.error(err);
 
-      if (err.name === "Incorrect email or password") {
+      if (err.message === "Incorrect email or password") {
         return res
           .status(UNAUTHORIZED_ERROR_CODE)
           .send({ message: err.message });
@@ -107,11 +108,9 @@ const updateProfile = (req, res) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST_ERROR_CODE)
-          .send({
-            message: "Invalid data passed to the update profile request",
-          });
+        return res.status(BAD_REQUEST_ERROR_CODE).send({
+          message: "Invalid data passed to the update profile request",
+        });
       }
       if (err.name === "DocumentNotFoundError") {
         return res
