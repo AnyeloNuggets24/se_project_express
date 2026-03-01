@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 const express = require("express");
 const mongoose = require("mongoose");
-const mainRouter = require("./routes/index");
 const cors = require("cors");
+const mainRouter = require("./routes/index");
 
 const app = express();
 const { PORT = 3001 } = process.env;

@@ -1,7 +1,8 @@
-const User = require("../models/users");
+/* eslint-disable no-console */
 const bcrypt = require("bcryptjs");
-const { JWT_SECRET } = require("../utils/config");
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../utils/config");
+const User = require("../models/users");
 
 const {
   BAD_REQUEST_ERROR_CODE,
@@ -23,9 +24,7 @@ const createUser = (req, res) => {
 
   return bcrypt
     .hash(password, 10)
-    .then((hash) => {
-      return User.create({ name, avatar, email, password: hash });
-    })
+    .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) =>
       res.status(201).send({
         _id: user._id,

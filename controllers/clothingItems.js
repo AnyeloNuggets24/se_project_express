@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const ClothingItem = require("../models/clothingItem");
 
 const {

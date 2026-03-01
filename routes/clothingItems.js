@@ -12,8 +12,8 @@ const {
 router.get("/", getClothingItems); // public
 router.use(auth); // protect everything below
 router.post("/", createClothingItem);
-router.delete("/:id", deleteClothingItem);
-router.put("/:id/likes", likeItem);
-router.delete("/:id/likes", dislikeItem);
+router.delete("/:itemId", deleteClothingItem);
+router.put("/:itemId/likes", likeItem);
+router.delete("/:itemId/likes", dislikeItem);
 
 module.exports = router;
