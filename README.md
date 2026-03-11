@@ -4,7 +4,7 @@ A secure REST API built with Node.js,Express, and MongoDB for managing clothing 
 
 This backend supports authentication, profile management, and ownership-base authorization using JWT
 
-**Setup:** clone the repo, run `npm install`, start MongoDB, then run `npm run dev` (server runs on `http://localhost:3001`).
+**Setup:** clone the repo, run `npm install`, start MongoDB, then run `npm run dev` (server defaults to `http://localhost:3001`, but you can override by creating a `.env` file with `PORT=3002` or similar).
 
 **Tech Stack**
 
