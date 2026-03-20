@@ -22,10 +22,10 @@ This backend supports authentication, profile management, and ownership-base aut
 
 **What this project demonstrates**
 
-*Secure API desgin
-*Middleware-base route protection
-*Modular backend architecture
-*Real World authentication patterns
+- Secure API design
+- Middleware-based route protection
+- Modular backend architecture
+- Real-world authentication patterns
 
 **Notes:** All requests currently use a temporary hardcoded user ID. Responses return JSON, with proper 400/403/404/500 status codes for errors.
 
@@ -35,3 +35,8 @@ This backend supports authentication, profile management, and ownership-base aut
 
 Check out [this video](https://drive.google.com/file/d/16YDFcyss6nkM8kl8CcQvyhfTnklmk2pw/view?usp=sharing), where I describe my
 project and some challenges I faced while building it.
+
+## Frontend Repository
+
+You can find the frontend code here:
+https://github.com/AnyeloNuggets24/se_project_react
