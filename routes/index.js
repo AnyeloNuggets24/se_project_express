@@ -2,6 +2,10 @@ const router = require("express").Router();
 const { login, createUser } = require("../controllers/users");
 const { auth } = require("../middlewares/auth");
 const { getClothingItems } = require("../controllers/clothingItems");
+const {
+  validateUserBody,
+  validateLoginBody,
+} = require("../middlewares/validation");
 const clothingItemsRouter = require("./clothingItems");
 const usersRouter = require("./users");
 const { NOT_FOUND_ERROR_CODE } = require("../utils/error");
@@ -10,8 +14,8 @@ const { NOT_FOUND_ERROR_CODE } = require("../utils/error");
 router.get("/items", getClothingItems);
 
 // POST /signin and /signup routes
-router.post("/signin", login);
-router.post("/signup", createUser);
+router.post("/signin", validateLoginBody, login);
+router.post("/signup", validateUserBody, createUser);
 
 // Apply authentication middleware to all routes below
 router.use(auth);
