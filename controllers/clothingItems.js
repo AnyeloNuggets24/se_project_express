@@ -1,10 +1,8 @@
 /* eslint-disable no-console */
 const ClothingItem = require("../models/clothingItem");
-const {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-} = require("../utils/customErrors");
+const BadRequestError = require("../errors/BadRequestError");
+const NotFoundError = require("../errors/NotFoundError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
 // GET /clothing-items
 const getClothingItems = (req, res, next) => {
