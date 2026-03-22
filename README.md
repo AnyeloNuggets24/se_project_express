@@ -33,10 +33,13 @@ This backend supports authentication, profile management, and ownership-base aut
 
 ## Project Pitch Video
 
-Check out [this video](https://drive.google.com/file/d/16YDFcyss6nkM8kl8CcQvyhfTnklmk2pw/view?usp=sharing), where I describe my
+Check out [https://drive.google.com/file/d/1oe7UQOY11rpvdq6IZ4YrdHes4FxuBa0L/view?usp=drive_link], where I describe my
 project and some challenges I faced while building it.
+
+```
 
 ## Frontend Repository
 
 You can find the frontend code here:
 https://github.com/AnyeloNuggets24/se_project_react
+```

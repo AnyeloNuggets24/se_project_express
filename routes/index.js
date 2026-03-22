@@ -8,7 +8,7 @@ const {
 } = require("../middlewares/validation");
 const clothingItemsRouter = require("./clothingItems");
 const usersRouter = require("./users");
-const { NOT_FOUND_ERROR_CODE } = require("../utils/error");
+const NotFoundError = require("../errors/NotFoundError");
 
 // Public route to get clothing items without authentication
 router.get("/items", getClothingItems);
@@ -23,10 +23,8 @@ router.use(auth);
 router.use("/items", clothingItemsRouter);
 router.use("/users", usersRouter);
 
-router.use((req, res) => {
-  res
-    .status(NOT_FOUND_ERROR_CODE)
-    .send({ message: "Requested resource not found" });
+router.use((req, res, next) => {
+  return next(new NotFoundError("Requested resource not found"));
 });
 
 module.exports = router;
